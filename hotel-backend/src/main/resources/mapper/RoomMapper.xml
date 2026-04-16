@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hotel.mapper.RoomMapper">
+
+    <resultMap id="BaseResultMap" type="com.hotel.entity.Room">
+        <id column="room_id" jdbcType="VARCHAR" property="roomId"/>
+        <result column="room_type" jdbcType="VARCHAR" property="roomType"/>
+        <result column="area" jdbcType="INTEGER" property="area"/>
+        <result column="introduce" jdbcType="VARCHAR" property="introduce"/>
+        <result column="photo_url" jdbcType="VARCHAR" property="photoUrl"/>
+        <result column="price" jdbcType="DECIMAL" property="price"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        room_id, room_type, area, introduce, photo_url, price
+    </sql>
+
+    <insert id="insert" parameterType="com.hotel.entity.Room">
+        INSERT INTO t_room (room_id, room_type, area, introduce, photo_url, price)
+        VALUES (#{roomId}, #{roomType}, #{area}, #{introduce}, #{photoUrl}, #{price})
+    </insert>
+
+    <update id="updateByPrimaryKey" parameterType="com.hotel.entity.Room">
+        UPDATE t_room
+        SET room_type = #{roomType},
+            area = #{area},
+            introduce = #{introduce},
+            photo_url = #{photoUrl},
+            price = #{price}
+        WHERE room_id = #{roomId}
+    </update>
+
+    <delete id="deleteByPrimaryKey">
+        DELETE FROM t_room WHERE room_id = #{roomId}
+    </delete>
+
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List"/>
+        FROM t_room
+        WHERE room_id = #{roomId}
+    </select>
+
+    <select id="selectAll" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List"/>
+        FROM t_room
+        ORDER BY room_id
+    </select>
+
+    <select id="selectByPage" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List"/>
+        FROM t_room
+        ORDER BY room_id
+        LIMIT #{offset}, #{limit}
+    </select>
+
+    <select id="countAll" resultType="java.lang.Integer">
+        SELECT COUNT(*) FROM t_room
+    </select>
+
+    <select id="selectByType" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List"/>
+        FROM t_room
+        WHERE room_type = #{roomType}
+        ORDER BY room_id
+    </select>
+
+    <select id="selectAvailableRooms" resultMap="BaseResultMap">
+        SELECT r.*
+        FROM t_room r
+        WHERE r.room_id NOT IN (
+            SELECT room_id FROM t_order WHERE end_time IS NULL
+        )
+        AND r.room_id NOT IN (
+            SELECT room_id FROM t_book_a_room
+        )
+        ORDER BY r.room_id
+    </select>
+
+</mapper>

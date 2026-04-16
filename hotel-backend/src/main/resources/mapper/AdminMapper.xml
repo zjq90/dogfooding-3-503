@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hotel.mapper.AdminMapper">
+
+    <resultMap id="BaseResultMap" type="com.hotel.entity.Admin">
+        <id column="admin_id" jdbcType="INTEGER" property="adminId"/>
+        <result column="admin_name" jdbcType="VARCHAR" property="adminName"/>
+        <result column="admin_pwd" jdbcType="VARCHAR" property="adminPwd"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        admin_id, admin_name, admin_pwd
+    </sql>
+
+    <select id="selectByUsernameAndPassword" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List"/>
+        FROM t_admin
+        WHERE admin_name = #{adminName} AND admin_pwd = #{adminPwd}
+        LIMIT 1
+    </select>
+
+    <insert id="insert" parameterType="com.hotel.entity.Admin" useGeneratedKeys="true" keyProperty="adminId">
+        INSERT INTO t_admin (admin_name, admin_pwd)
+        VALUES (#{adminName}, #{adminPwd})
+    </insert>
+
+    <update id="updateByPrimaryKey" parameterType="com.hotel.entity.Admin">
+        UPDATE t_admin
+        SET admin_name = #{adminName},
+            admin_pwd = #{adminPwd}
+        WHERE admin_id = #{adminId}
+    </update>
+
+    <delete id="deleteByPrimaryKey">
+        DELETE FROM t_admin WHERE admin_id = #{adminId}
+    </delete>
+
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List"/>
+        FROM t_admin
+        WHERE admin_id = #{adminId}
+    </select>
+
+    <select id="selectAll" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List"/>
+        FROM t_admin
+        ORDER BY admin_id DESC
+    </select>
+
+</mapper>

@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hotel.mapper.UserMapper">
+
+    <resultMap id="BaseResultMap" type="com.hotel.entity.User">
+        <id column="user_id" jdbcType="INTEGER" property="userId"/>
+        <result column="user_name" jdbcType="VARCHAR" property="userName"/>
+        <result column="user_pwd" jdbcType="VARCHAR" property="userPwd"/>
+        <result column="address" jdbcType="VARCHAR" property="address"/>
+        <result column="phone" jdbcType="VARCHAR" property="phone"/>
+        <result column="email" jdbcType="VARCHAR" property="email"/>
+        <result column="QQ" jdbcType="VARCHAR" property="qq"/>
+        <result column="photo_url" jdbcType="VARCHAR" property="photoUrl"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        user_id, user_name, user_pwd, address, phone, email, QQ, photo_url
+    </sql>
+
+    <select id="selectByUsernameAndPassword" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List"/>
+        FROM t_user
+        WHERE user_name = #{userName} AND user_pwd = #{userPwd}
+        LIMIT 1
+    </select>
+
+    <select id="countByUsername" resultType="java.lang.Integer">
+        SELECT COUNT(*)
+        FROM t_user
+        WHERE user_name = #{userName}
+    </select>
+
+    <insert id="insert" parameterType="com.hotel.entity.User" useGeneratedKeys="true" keyProperty="userId">
+        INSERT INTO t_user (user_name, user_pwd, address, phone, email, QQ, photo_url)
+        VALUES (#{userName}, #{userPwd}, #{address}, #{phone}, #{email}, #{qq}, #{photoUrl})
+    </insert>
+
+    <update id="updateByPrimaryKey" parameterType="com.hotel.entity.User">
+        UPDATE t_user
+        SET user_name = #{userName},
+            user_pwd = #{userPwd},
+            address = #{address},
+            phone = #{phone},
+            email = #{email},
+            QQ = #{qq},
+            photo_url = #{photoUrl}
+        WHERE user_id = #{userId}
+    </update>
+
+    <delete id="deleteByPrimaryKey">
+        DELETE FROM t_user WHERE user_id = #{userId}
+    </delete>
+
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List"/>
+        FROM t_user
+        WHERE user_id = #{userId}
+    </select>
+
+    <select id="selectAll" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List"/>
+        FROM t_user
+        ORDER BY user_id DESC
+    </select>
+
+    <select id="selectByPage" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List"/>
+        FROM t_user
+        ORDER BY user_id DESC
+        LIMIT #{offset}, #{limit}
+    </select>
+
+    <select id="countAll" resultType="java.lang.Integer">
+        SELECT COUNT(*) FROM t_user
+    </select>
+
+</mapper>

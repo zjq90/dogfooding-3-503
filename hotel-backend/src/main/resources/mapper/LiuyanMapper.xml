@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hotel.mapper.LiuyanMapper">
+
+    <resultMap id="BaseResultMap" type="com.hotel.entity.Liuyan">
+        <id column="ser_num" jdbcType="BIGINT" property="serNum"/>
+        <result column="user_name" jdbcType="VARCHAR" property="userName"/>
+        <result column="liuyan" jdbcType="VARCHAR" property="liuyan"/>
+        <result column="release_time" jdbcType="TIMESTAMP" property="releaseTime"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        ser_num, user_name, liuyan, release_time
+    </sql>
+
+    <insert id="insert" parameterType="com.hotel.entity.Liuyan" useGeneratedKeys="true" keyProperty="serNum">
+        INSERT INTO t_liuyan (user_name, liuyan, release_time)
+        VALUES (#{userName}, #{liuyan}, NOW())
+    </insert>
+
+    <delete id="deleteByPrimaryKey">
+        DELETE FROM t_liuyan WHERE ser_num = #{serNum}
+    </delete>
+
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List"/>
+        FROM t_liuyan
+        WHERE ser_num = #{serNum}
+    </select>
+
+    <select id="selectAll" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List"/>
+        FROM t_liuyan
+        ORDER BY release_time DESC
+    </select>
+
+</mapper>
