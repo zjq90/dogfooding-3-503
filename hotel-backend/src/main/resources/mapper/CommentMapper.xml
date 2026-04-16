@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hotel.mapper.CommentMapper">
+
+    <select id="selectByRoomId" resultType="com.hotel.entity.Comment">
+        SELECT ser_num, user_name, room_id, content, release_time
+        FROM t_comment
+        WHERE room_id = #{roomId} AND content IS NOT NULL AND content != ''
+        ORDER BY release_time DESC
+    </select>
+</mapper>

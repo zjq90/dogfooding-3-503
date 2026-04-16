@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hotel.mapper.RoomMapper">
+
+    <select id="selectByRoomType" resultType="com.hotel.entity.Room">
+        SELECT room_id, room_type, area, introduce, photo_url, price
+        FROM t_room
+        WHERE room_type = #{roomType}
+    </select>
+
+    <select id="selectByPriceRange" resultType="com.hotel.entity.Room">
+        SELECT room_id, room_type, area, introduce, photo_url, price
+        FROM t_room
+        WHERE price BETWEEN #{startPrice} AND #{endPrice}
+        ORDER BY price ASC
+    </select>
+
+    <select id="existsByRoomId" resultType="int">
+        SELECT COUNT(*) FROM t_room WHERE room_id = #{roomId}
+    </select>
+
+    <select id="selectAvailableRooms" resultType="com.hotel.entity.Room">
+        SELECT r.room_id, r.room_type, r.area, r.introduce, r.photo_url, r.price
+        FROM t_room r
+        WHERE r.room_id NOT IN (SELECT room_id FROM t_book_a_room)
+          AND r.room_id NOT IN (SELECT room_id FROM t_order)
+    </select>
+</mapper>
