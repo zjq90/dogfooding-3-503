@@ -59,6 +59,12 @@
       <artifactId>mysql-connector-java</artifactId>
       <version>8.0.16</version>
     </dependency>
+    <!-- h2 database driver -->
+    <dependency>
+      <groupId>com.h2database</groupId>
+      <artifactId>h2</artifactId>
+      <version>1.4.200</version>
+    </dependency>
 
     <!-- mybatis orm框架 -->
     <dependency>
