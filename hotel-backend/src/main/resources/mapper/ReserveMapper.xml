@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hotel.mapper.ReserveMapper">
+
+    <resultMap id="BaseResultMap" type="com.hotel.entity.Reserve">
+        <result column="room_id" jdbcType="VARCHAR" property="roomId"/>
+        <result column="count_date" jdbcType="INTEGER" property="countDate"/>
+        <result column="user_name" jdbcType="VARCHAR" property="userName"/>
+        <result column="phone" jdbcType="VARCHAR" property="phone"/>
+        <result column="preset_time" jdbcType="TIMESTAMP" property="presetTime"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        room_id, count_date, user_name, phone, preset_time
+    </sql>
+
+    <insert id="insert" parameterType="com.hotel.entity.Reserve">
+        INSERT INTO t_book_a_room (room_id, count_date, user_name, phone, preset_time)
+        VALUES (#{roomId}, #{countDate}, #{userName}, #{phone}, NOW())
+    </insert>
+
+    <update id="updateByPrimaryKey" parameterType="com.hotel.entity.Reserve">
+        UPDATE t_book_a_room
+        SET count_date = #{countDate},
+            user_name = #{userName},
+            phone = #{phone}
+        WHERE room_id = #{roomId}
+    </update>
+
+    <delete id="deleteByPrimaryKey">
+        DELETE FROM t_book_a_room WHERE room_id = #{roomId}
+    </delete>
+
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List"/>
+        FROM t_book_a_room
+        WHERE room_id = #{roomId}
+    </select>
+
+    <select id="selectAll" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List"/>
+        FROM t_book_a_room
+        ORDER BY preset_time DESC
+    </select>
+
+    <select id="selectByPage" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List"/>
+        FROM t_book_a_room
+        ORDER BY preset_time DESC
+        LIMIT #{offset}, #{limit}
+    </select>
+
+    <select id="countAll" resultType="java.lang.Integer">
+        SELECT COUNT(*) FROM t_book_a_room
+    </select>
+
+    <select id="selectByUserName" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List"/>
+        FROM t_book_a_room
+        WHERE user_name = #{userName}
+        ORDER BY preset_time DESC
+    </select>
+
+</mapper>

@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hotel.mapper.CommentMapper">
+
+    <resultMap id="BaseResultMap" type="com.hotel.entity.Comment">
+        <id column="ser_num" jdbcType="INTEGER" property="serNum"/>
+        <result column="user_name" jdbcType="VARCHAR" property="userName"/>
+        <result column="room_id" jdbcType="VARCHAR" property="roomId"/>
+        <result column="content" jdbcType="VARCHAR" property="content"/>
+        <result column="release_time" jdbcType="TIMESTAMP" property="releaseTime"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        ser_num, user_name, room_id, content, release_time
+    </sql>
+
+    <insert id="insert" parameterType="com.hotel.entity.Comment" useGeneratedKeys="true" keyProperty="serNum">
+        INSERT INTO t_comment (user_name, room_id, content, release_time)
+        VALUES (#{userName}, #{roomId}, #{content}, NOW())
+    </insert>
+
+    <delete id="deleteByPrimaryKey">
+        DELETE FROM t_comment WHERE ser_num = #{serNum}
+    </delete>
+
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List"/>
+        FROM t_comment
+        WHERE ser_num = #{serNum}
+    </select>
+
+    <select id="selectAll" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List"/>
+        FROM t_comment
+        ORDER BY release_time DESC
+    </select>
+
+    <select id="selectByPage" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List"/>
+        FROM t_comment
+        ORDER BY release_time DESC
+        LIMIT #{offset}, #{limit}
+    </select>
+
+    <select id="countAll" resultType="java.lang.Integer">
+        SELECT COUNT(*) FROM t_comment
+    </select>
+
+    <select id="selectByRoomId" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List"/>
+        FROM t_comment
+        WHERE room_id = #{roomId}
+        ORDER BY release_time DESC
+    </select>
+
+    <select id="selectByUserName" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List"/>
+        FROM t_comment
+        WHERE user_name = #{userName}
+        ORDER BY release_time DESC
+    </select>
+
+</mapper>
